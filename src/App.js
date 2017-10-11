@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Menu, Table, Input } from 'semantic-ui-react'
+import { Container, Menu, Table, Input, Dropdown } from 'semantic-ui-react'
 
 class App extends Component {
   state = { activeItem: 'runs list' }
@@ -7,6 +7,13 @@ class App extends Component {
 
   render() {
     const { activeItem } = this.state
+    const stageOptions = [
+      { key: 'English', text: 'English', value: 'English' },
+      { key: 'French', text: 'French', value: 'French' },
+      { key: 'Spanish', text: 'Spanish', value: 'Spanish' },
+      { key: 'German', text: 'German', value: 'German' },
+      { key: 'Chinese', text: 'Chinese', value: 'Chinese' },
+    ]
     return (
       <Container fluid={true}>
         <Menu pointing secondary>
@@ -32,9 +39,23 @@ class App extends Component {
                   <Input placeholder='...' style={{width: '100%'}}/>
                 </Table.HeaderCell>
                 <Table.HeaderCell style={{padding: '2px 3px 2px 3px'}}>
-                  Stage Name
+                  <Dropdown style={{width: '100%'}}
+                    compact
+                    options={stageOptions}
+                    placeholder='...'
+                    search
+                    selection
+                  />
                 </Table.HeaderCell>
-                <Table.HeaderCell>Initializer</Table.HeaderCell>
+                <Table.HeaderCell style={{padding: '2px 3px 2px 3px'}}>
+                  <Dropdown style={{width: '100%'}}
+                    compact
+                    options={stageOptions}
+                    placeholder='...'
+                    search
+                    selection
+                  />
+                </Table.HeaderCell>
                 <Table.HeaderCell>Start time</Table.HeaderCell>
                 <Table.HeaderCell>Duration</Table.HeaderCell>
                 <Table.HeaderCell>Total</Table.HeaderCell>
