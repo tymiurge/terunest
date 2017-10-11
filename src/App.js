@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Menu, Table } from 'semantic-ui-react'
+import { Container, Menu, Table, Input } from 'semantic-ui-react'
 
 class App extends Component {
   state = { activeItem: 'runs list' }
@@ -19,6 +19,21 @@ class App extends Component {
               <Table.Row>
                 <Table.HeaderCell>Run Title</Table.HeaderCell>
                 <Table.HeaderCell>Stage Name</Table.HeaderCell>
+                <Table.HeaderCell>Initializer</Table.HeaderCell>
+                <Table.HeaderCell>Start time</Table.HeaderCell>
+                <Table.HeaderCell>Duration</Table.HeaderCell>
+                <Table.HeaderCell>Total</Table.HeaderCell>
+                <Table.HeaderCell>Failed</Table.HeaderCell>
+                <Table.HeaderCell>Passed</Table.HeaderCell>
+                <Table.HeaderCell>Skipped</Table.HeaderCell>
+              </Table.Row>
+              <Table.Row>
+                <Table.HeaderCell style={{padding: '2px 3px 2px 3px'}}>
+                  <Input placeholder='...' style={{width: '100%'}}/>
+                </Table.HeaderCell>
+                <Table.HeaderCell style={{padding: '2px 3px 2px 3px'}}>
+                  Stage Name
+                </Table.HeaderCell>
                 <Table.HeaderCell>Initializer</Table.HeaderCell>
                 <Table.HeaderCell>Start time</Table.HeaderCell>
                 <Table.HeaderCell>Duration</Table.HeaderCell>
