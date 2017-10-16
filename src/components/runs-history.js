@@ -2,20 +2,25 @@ import React, { Component } from 'react'
 import { Container, Table, Icon, Button, Popup, Input } from 'semantic-ui-react'
 import TreeGrid from './tree-grid'
 import { v4 } from 'js-uuid'
+import deepAssign from 'deep-assign'
 
-const headers = [{
+const treeField = {
     title: 'Run Title', field: 'title'
-}, {
-    title: '1', field: 'run1' 
-}, , {
-    title: '2', field: 'run2' 
-}, {
-    title: '3', field: 'run3' 
-}, {
-    title: '4', field: 'run4' 
-}, , {
-    title: '5', field: 'run5' 
-}]
+}
+
+const fields = [
+    {
+        title: '1', field: 'run1' 
+    }, {
+        title: '2', field: 'run2' 
+    }, {
+        title: '3', field: 'run3' 
+    }, {
+        title: '4', field: 'run4' 
+    }, {
+        title: '5', field: 'run5' 
+    }    
+]
 
 const items = [
     {
@@ -183,14 +188,32 @@ class RunsHistory extends Component {
         )
     }
 
+    singleFieldMapper = (tree, field) => tree.map(node => {
+        if (!node.children) return node
+        const children = this.singleFieldMapper(node.children, field)
+        const summary = this.nodeSummurizer(node, field)
+        return Object.assign({}, node, {children, [field]: summary})
+    })
+
+    fieldsMapper = (tree, fields) => {
+        return fields.reduce(
+            (accumulator, current) => {
+                let treeWithField = this.singleFieldMapper(tree, current)
+                accumulator = deepAssign(accumulator, treeWithField)
+                return accumulator
+            },
+            {}
+        )
+    }
+
     render() {
         //const normilizedItems = this.normilize(items, ['run1', 'run2', 'run3', 'run4', 'run5'])
-        const firstSummary = this.nodeSummurizer(items[0], 'run4')
-        console.log('firstSummary = ' + firstSummary)
+        let summarizedTree = this.fieldsMapper(items, ['run1', 'run2', 'run3', 'run4', 'run5'])
+        
         console.log('finished')
         return (
             <Container>
-                <TreeGrid headers={headers} items={items} />
+                <TreeGrid treeField={treeField} fields={fields} treeNodes={items} />
             </Container>
         )
     }

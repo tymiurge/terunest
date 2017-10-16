@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
 import { Table, Icon, Button, Popup, Input } from 'semantic-ui-react'
 import TreeGridCell from './tree-grid-cell'
+import PropTypes from 'prop-types'
 
+const propTypes = {
+    treeField: PropTypes.objectOf({
+        field: PropTypes.string.isRequired,
+        title: PropTypes.string
+    }).isRequired,
+    fields: PropTypes.array.isRequired,
+    treeNodes: PropTypes.array.isRequired
+}
 
 const treeFlatify = (tree, level) => tree.map(node => {
     const changes = {expanded: true, level}
@@ -17,9 +26,9 @@ class TreeGrid extends Component {
 
     constructor (props) {
         super(props)
-        const rows = treeFlatify(this.props.items, 1)
         this.state = {
-            rows
+            headers: [this.props.treeField, ...this.props.fields],
+            rows: treeFlatify(this.props.treeNodes, 1)
         }
     }
 
@@ -64,7 +73,7 @@ class TreeGrid extends Component {
                 <Table.Header>
                     <Table.Row>
                         {
-                            this.props.headers.map( (header, idx) => 
+                            this.state.headers.map( (header, idx) => 
                                 <Table.HeaderCell key={'header' + idx}>
                                     {header.title}
                                 </Table.HeaderCell>)
@@ -80,5 +89,7 @@ class TreeGrid extends Component {
         )
     }
 }
+
+TreeGrid.propTypes = propTypes
 
 export default TreeGrid
