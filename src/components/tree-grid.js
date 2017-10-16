@@ -60,7 +60,7 @@ class TreeGrid extends Component {
 
     render () {
         return (
-            <Table>
+            <Table celled compact>
                 <Table.Header>
                     <Table.Row>
                         {
