@@ -62,11 +62,13 @@ class TreeGrid extends Component {
                     onExpand={() => this.toggleRowExpand(row.id)}
                 />
                 {
-                    this.props.fields.map(fieldName => (
-                        <Table.Cell>
-                            { this.props.formatter(row[fieldName.field]) }
-                        </Table.Cell>
-                    ))
+                    this.props.fields.map(field => {
+                        const format = this.props.formatter(row[field.field])
+                        return (<Table.Cell style={{backgroundColor: format.backgroundColor}}>
+                            { format.value }
+                        </Table.Cell>)
+                    })
+                    
                 }
                 
             </Table.Row>

@@ -154,6 +154,15 @@ const items = [
     }]
 }
 ]
+
+const backgroundColors = status => {
+    const statusToColorMap = {
+        failed: 'red',
+        skipped: 'grey',
+        passed: 'green'
+    }
+    return statusToColorMap[status]
+}
     
 
 class RunsHistory extends Component {
@@ -216,10 +225,14 @@ class RunsHistory extends Component {
                     fields={fields}
                     treeNodes={summarizedTree}
                     formatter={value => {
-                        if (typeof value === 'string') return value
-                        if (value.hasOwnProperty('failed')) return 'F'
-                        if (!value.hasOwnProperty('failed') && !value.hasOwnProperty('passed') && value.hasOwnProperty('skipped')) return 'S'
-                        return 'P'
+                        if (typeof value === 'string') {
+                            return {value: '', backgroundColor: backgroundColors(value)}
+                        }
+                        if (value.hasOwnProperty('failed')) return {value: '', backgroundColor: backgroundColors('failed')}
+                        if (!value.hasOwnProperty('failed') && !value.hasOwnProperty('passed') && value.hasOwnProperty('skipped')) {
+                            return {value: '', backgroundColor: backgroundColors('skipped')}
+                        }
+                        return {value: '', backgroundColor: backgroundColors('passed')}
                     }}
                 />
             </Container>
