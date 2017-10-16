@@ -9,16 +9,21 @@ const propTypes = {
         title: PropTypes.string
     }).isRequired,
     fields: PropTypes.array.isRequired,
-    treeNodes: PropTypes.array.isRequired
+    treeNodes: PropTypes.array.isRequired,
+    formatter: PropTypes.func.isRequired 
 }
 
-const treeFlatify = (tree, level) => tree.map(node => {
-    const changes = {expanded: true, level}
-    if (node.children) {
-      changes['children'] = treeFlatify(node.children, level + 1)
-    }
-    return Object.assign({}, node, changes)
-})
+const treeFlatify = (tree, level) => {
+    const r = tree.map(node => {
+        const changes = {expanded: true, level}
+        if (node.children) {
+        changes['children'] = treeFlatify(node.children, level + 1)
+        }
+        return Object.assign({}, node, changes)
+    })
+    return r
+}
+    
 
 
 
@@ -26,9 +31,10 @@ class TreeGrid extends Component {
 
     constructor (props) {
         super(props)
+        const rows = treeFlatify(this.props.treeNodes, 1)
         this.state = {
             headers: [this.props.treeField, ...this.props.fields],
-            rows: treeFlatify(this.props.treeNodes, 1)
+            rows
         }
     }
 
@@ -55,11 +61,14 @@ class TreeGrid extends Component {
                     isExpanded={row.expanded}
                     onExpand={() => this.toggleRowExpand(row.id)}
                 />
-                <Table.Cell>{row.run1}</Table.Cell>
-                <Table.Cell>{row.run2}</Table.Cell>
-                <Table.Cell>{row.run3}</Table.Cell>
-                <Table.Cell>{row.run4}</Table.Cell>
-                <Table.Cell>{row.run5}</Table.Cell>
+                {
+                    this.props.fields.map(fieldName => (
+                        <Table.Cell>
+                            { this.props.formatter(row[fieldName.field]) }
+                        </Table.Cell>
+                    ))
+                }
+                
             </Table.Row>
         )
         return children && row.expanded
