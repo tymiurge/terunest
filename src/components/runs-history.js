@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Table, Icon, Button, Popup, Input } from 'semantic-ui-react'
+import { Container } from 'semantic-ui-react'
 import TreeGrid from './tree-grid'
 import { v4 } from 'js-uuid'
 import deepAssign from 'deep-assign'

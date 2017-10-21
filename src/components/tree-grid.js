@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Icon, Button, Popup, Input } from 'semantic-ui-react'
+import { Table } from 'semantic-ui-react'
 import TreeGridCell from './tree-grid-cell'
 import PropTypes from 'prop-types'
 

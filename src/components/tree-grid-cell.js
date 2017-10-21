@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Table, Icon, Button, Popup, Input } from 'semantic-ui-react'
+import { Table, Icon } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 
 const propTypes = {
