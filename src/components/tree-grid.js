@@ -4,8 +4,8 @@ import TreeGridCell from './tree-grid-cell'
 import PropTypes from 'prop-types'
 
 const propTypes = {
-    treeField: PropTypes.objectOf({
-        field: PropTypes.string.isRequired,
+    treeField: PropTypes.shape({
+        field: PropTypes.string,
         title: PropTypes.string
     }).isRequired,
     fields: PropTypes.array.isRequired,
@@ -14,20 +14,14 @@ const propTypes = {
     formatter: PropTypes.func.isRequired 
 }
 
-const treeFlatify = (tree, level) => {
-    const r = tree.map(node => {
-        const changes = {expanded: true, level}
-        if (node.children) {
+const treeFlatify = (tree, level) => tree.map(node => {
+    const changes = {expanded: true, level}
+    if (node.children) {
         changes['children'] = treeFlatify(node.children, level + 1)
-        }
-        return Object.assign({}, node, changes)
-    })
-    return r
-}
+    }
+    return Object.assign({}, node, changes)
+})
     
-
-
-
 class TreeGrid extends Component {
 
     constructor (props) {
@@ -50,7 +44,7 @@ class TreeGrid extends Component {
         this.setState({rows: newData})
     }
 
-    renderRows = rows => rows.map((row, dix) => {
+    renderRows = rows => rows.map((row, idx) => {
         const { children, level } = row
         const intend = children ? (level - 1) * 1.43 : level * 1.43
         const domRow = (
@@ -63,11 +57,13 @@ class TreeGrid extends Component {
                     onExpand={() => this.toggleRowExpand(row.id)}
                 />
                 {
-                    this.props.fields.map(field => {
+                    this.props.fields.map((field, fieldIdx) => {
                         const format = this.props.formatter(row[field.field])
-                        return (<Table.Cell style={{backgroundColor: format.backgroundColor}}>
-                            { format.value }
-                        </Table.Cell>)
+                        return (
+                            <Table.Cell style={{backgroundColor: format.backgroundColor}} key={fieldIdx + row.id + format.value}>
+                                { format.value }
+                            </Table.Cell>
+                        )
                     })
                     
                 }

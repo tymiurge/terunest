@@ -32,7 +32,7 @@ class App extends Component {
         }
         {
           activeItem === 'run details' &&
-          <RunDetails />
+          <RunDetails /> 
         }
       </Container>
     );

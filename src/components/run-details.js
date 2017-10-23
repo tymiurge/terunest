@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Container } from 'semantic-ui-react'
 import { v4 } from 'js-uuid'
 import TreeGrid from './tree-grid'
-import deepAssign from 'deep-assign'
 
 const treeField = {
     title: 'Run Title', field: 'title'
@@ -173,7 +172,7 @@ class RunDetails extends Component {
 
     totalSummurizer = (tree, statuses) => tree.map(node => {
         let changes = { total: this.leafTotalSummurizer(node, statuses)}
-        if (node.children) changes = Object.assign(changes, {children: this.totalSummurizer(node.children, statuses)})
+        if (node.children) changes['children'] = this.totalSummurizer(node.children, statuses)
         return Object.assign({}, node, changes)
     })
 
