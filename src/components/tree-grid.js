@@ -10,6 +10,7 @@ const propTypes = {
     }).isRequired,
     fields: PropTypes.array.isRequired,
     treeNodes: PropTypes.array.isRequired,
+    /** @returns object of {backgroundColor: <value>, value: <value>} */
     formatter: PropTypes.func.isRequired 
 }
 
