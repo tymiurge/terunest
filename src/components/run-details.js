@@ -195,6 +195,11 @@ class RunDetails extends Component {
                             return {backgroundColor: '', value}
                         } 
                     }
+                    fieldsFormatter={row => {
+                        if (row.children) return {toBeApplied: false}
+                        const rowStatus = statuses.filter(status => row[status.field] === 1)
+                        return {toBeApplied: true, backgroundColor: '', value: rowStatus[0].title}
+                    }}
                 />
             </Container>
         )

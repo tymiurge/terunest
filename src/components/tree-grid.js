@@ -10,8 +10,16 @@ const propTypes = {
     }).isRequired,
     fields: PropTypes.array.isRequired,
     treeNodes: PropTypes.array.isRequired,
-    /** @returns object of {backgroundColor: <value>, value: <value>} */
-    formatter: PropTypes.func.isRequired 
+    /** 
+     * @returns object of {backgroundColor: <value>, value: <value>}; is ignored if fieldsFormatter is defined and if 
+     * fieldsFormatter returns {toBeApplied: true} 
+     **/
+    formatter: PropTypes.func.isRequired,
+    /** 
+     * if defined the all fields cells will be joint @returns object of 
+     * {tobeApplied: bool, backgroundColor: <value>, value: <value>} 
+     **/
+    fieldsFormatter: PropTypes.func
 }
 
 const treeFlatify = (tree, level) => tree.map(node => {
@@ -44,7 +52,35 @@ class TreeGrid extends Component {
         this.setState({rows: newData})
     }
 
-    renderRows = rows => rows.map((row, idx) => {
+    renderCells = row => {
+        if (this.props.fieldsFormatter) {
+            const format = this.props.fieldsFormatter(row)
+            if (format.toBeApplied) {
+                return ( 
+                    <Table.Cell
+                        style={{backgroundColor: format.backgroundColor}}
+                        colSpan={this.props.fields.length}
+                        key={row.id + format.value}
+                        textAlign='center'
+                        content={format.value}
+                    />
+                )
+            }
+        }
+        return this.props.fields.map((field, fieldIdx) => {
+            const format = this.props.formatter(row[field.field])
+            return (
+                <Table.Cell
+                    style={{backgroundColor: format.backgroundColor}}
+                    key={fieldIdx + row.id + format.value}
+                    textAlign='center'
+                    content={format.value}
+                />
+            )
+        })
+    }
+
+    renderRows = rows => rows.map(row => {
         const { children, level } = row
         const intend = children ? (level - 1) * 1.43 : level * 1.43
         const domRow = (
@@ -57,14 +93,15 @@ class TreeGrid extends Component {
                     onExpand={() => this.toggleRowExpand(row.id)}
                 />
                 {
-                    this.props.fields.map((field, fieldIdx) => {
+                    /*this.props.fields.map((field, fieldIdx) => {
                         const format = this.props.formatter(row[field.field])
                         return (
                             <Table.Cell style={{backgroundColor: format.backgroundColor}} key={fieldIdx + row.id + format.value}>
                                 { format.value }
                             </Table.Cell>
                         )
-                    })
+                    })*/
+                    this.renderCells(row)
                     
                 }
                 
