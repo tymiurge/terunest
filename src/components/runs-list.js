@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Table, Input } from 'semantic-ui-react'
+import { Container, Table, Input, Icon } from 'semantic-ui-react'
 
 class RunsList extends Component {
 
@@ -11,6 +11,7 @@ class RunsList extends Component {
           <Table compact celled>
             <Table.Header>
               <Table.Row>
+              <Table.HeaderCell></Table.HeaderCell>
                 <Table.HeaderCell>Run Title</Table.HeaderCell>
                 <Table.HeaderCell>Stage Name</Table.HeaderCell>
                 <Table.HeaderCell>Initializer</Table.HeaderCell>
@@ -24,6 +25,7 @@ class RunsList extends Component {
             </Table.Header>
             <Table.Body>
               <Table.Row positive>
+                <Table.Cell collapsing><Icon name='arrow circle right' link /></Table.Cell>
                 <Table.Cell>vulkan stavka web check</Table.Cell>
                 <Table.Cell>stage-00</Table.Cell>
                 <Table.Cell>paulwalker</Table.Cell>
@@ -35,6 +37,7 @@ class RunsList extends Component {
                 <Table.Cell>2</Table.Cell>
               </Table.Row>
               <Table.Row negative>
+                <Table.Cell collapsing><Icon name='arrow circle right' link /></Table.Cell>
                 <Table.Cell>vulkan stavka web check</Table.Cell>
                 <Table.Cell>production</Table.Cell>
                 <Table.Cell>paulwalker</Table.Cell>
