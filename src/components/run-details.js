@@ -141,35 +141,6 @@ class RunDetails extends Component {
         )
         return summary
     }
-    
-    
-    
-    
-    /*{
-        if (!node.children)  {
-            const leafSummary = fields.reduce(
-                (summary, field) => {
-                    summary[field] = node[field] ? 1 : 0
-                    return summary
-                },
-                {}
-            )
-            return leafSummary
-        }
-        const summary = node.children.reduce(
-            (accumulator, child) => {
-                if (!child.children) {
-                    fields.forEach(field => accumulator[field] = accumulator[field] + child[field])
-                    return accumulator
-                }
-                const childAccumulator = this.nodeSummarizer(child.children, fields)
-                fields.forEach(field => accumulator[field] = accumulator[field] + childAccumulator[field])
-                return accumulator
-            },
-            {}
-        )
-        return summary
-    }*/
 
     nodesAssigner = (tree, fields) => tree.map(node => {
         if (!node.children) {
@@ -177,7 +148,6 @@ class RunDetails extends Component {
         }
         const children = this.nodesAssigner(node.children, fields)
         const nodeSummary = this.nodeSummarizer(children, fields)
-        //const children = this.nodesAssigner(node.children, fields)
         return Object.assign({}, node, {children}, nodeSummary)
     })
     
@@ -199,12 +169,27 @@ class RunDetails extends Component {
         return Object.assign({}, node, {children})
     })
 
+    leafTotalSummurizer = (node, statuses) => {
+        const total = statuses.reduce(
+            (accumulator, status) => {
+                return accumulator + node[status]
+            }, 
+            0
+        )
+        return total
+    }
 
+    totalSummurizer = (tree, statuses) => tree.map(node => {
+        let changes = { total: this.leafTotalSummurizer(node, statuses)}
+        if (node.children) changes = Object.assign(changes, {children: this.totalSummurizer(node.children, statuses)})
+        return Object.assign({}, node, changes)
+    })
 
     fieldsMapper = (tree, fields) => {
         const leafsNormTree = this.leafsAssigner(tree, fields)
         const nodesNormTree = this.nodesAssigner(leafsNormTree, fields)
-        return leafsNormTree
+        const nodesWithTotal = this.totalSummurizer(nodesNormTree, fields)
+        return nodesWithTotal
     }
     
     render () {
