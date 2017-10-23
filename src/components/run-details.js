@@ -8,7 +8,7 @@ const treeField = {
     title: 'Run Title', field: 'title'
 }
 
-const fields = [
+const statuses = [
     {
         title: 'Passed', field: 'passed' 
     }, {
@@ -129,10 +129,10 @@ const items = [
 
 class RunDetails extends Component {
 
-    nodeSummarizer = (nodes, fields) => {
+    nodeSummarizer = (nodes, statuses) => {
         const summary = nodes.reduce(
             (accumulator, node) => {
-                fields.forEach(field => {
+                statuses.forEach(field => {
                     accumulator[field] = (accumulator[field] || 0) + node[field]
                 })
                 return accumulator
@@ -142,16 +142,16 @@ class RunDetails extends Component {
         return summary
     }
 
-    nodesAssigner = (tree, fields) => tree.map(node => {
+    nodesAssigner = (tree, statuses) => tree.map(node => {
         if (!node.children) {
             return node
         }
-        const children = this.nodesAssigner(node.children, fields)
-        const nodeSummary = this.nodeSummarizer(children, fields)
+        const children = this.nodesAssigner(node.children, statuses)
+        const nodeSummary = this.nodeSummarizer(children, statuses)
         return Object.assign({}, node, {children}, nodeSummary)
     })
     
-    leafConvertor = (leaf, fields) => fields.reduce(
+    leafConvertor = (leaf, statuses) => statuses.reduce(
         (accumulator, current) => {
             accumulator[current] = leaf.status === current ? 1 : 0
             return accumulator
@@ -159,25 +159,17 @@ class RunDetails extends Component {
         {}
     )
 
-    leafsAssigner = (tree, fields) => tree.map(node => {
+    leafsAssigner = (tree, statuses) => tree.map(node => {
         if (!node.children) {
-            let clone = Object.assign({}, node, this.leafConvertor(node, fields))
+            let clone = Object.assign({}, node, this.leafConvertor(node, statuses))
             delete clone.status
             return clone
         }
-        const children = this.leafsAssigner(node.children, fields)
+        const children = this.leafsAssigner(node.children, statuses)
         return Object.assign({}, node, {children})
     })
 
-    leafTotalSummurizer = (node, statuses) => {
-        const total = statuses.reduce(
-            (accumulator, status) => {
-                return accumulator + node[status]
-            }, 
-            0
-        )
-        return total
-    }
+    leafTotalSummurizer = (node, statuses) => statuses.reduce((accumulator, status) => accumulator + node[status], 0)
 
     totalSummurizer = (tree, statuses) => tree.map(node => {
         let changes = { total: this.leafTotalSummurizer(node, statuses)}
@@ -185,23 +177,23 @@ class RunDetails extends Component {
         return Object.assign({}, node, changes)
     })
 
-    fieldsMapper = (tree, fields) => {
-        const leafsNormTree = this.leafsAssigner(tree, fields)
-        const nodesNormTree = this.nodesAssigner(leafsNormTree, fields)
-        const nodesWithTotal = this.totalSummurizer(nodesNormTree, fields)
+    fieldsMapper = (tree, statuses) => {
+        const leafsNormTree = this.leafsAssigner(tree, statuses)
+        const nodesNormTree = this.nodesAssigner(leafsNormTree, statuses)
+        const nodesWithTotal = this.totalSummurizer(nodesNormTree, statuses)
         return nodesWithTotal
     }
     
     render () {
-        let summarizedTree = this.fieldsMapper(items, fields.map(field => field.field))
+        let summarizedTree = this.fieldsMapper(items, statuses.map(field => field.field))
         return (
             <Container>
                 <TreeGrid
                     treeField={treeField}
-                    fields={fields}
-                    treeNodes={items}
+                    fields={ [{field: 'total', title: 'Total'}, ...statuses] }
+                    treeNodes={summarizedTree}
                     formatter={value => {
-                            return {backgroundColor: '', value: 'vivat!'}
+                            return {backgroundColor: '', value}
                         } 
                     }
                 />
