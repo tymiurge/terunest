@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Table, Input, Icon, Button, Menu, Message } from 'semantic-ui-react'
+import { Container, Table, Input, Icon, Menu, Message } from 'semantic-ui-react'
 import { v4 } from 'js-uuid'
 
 const runs = [
@@ -70,12 +70,28 @@ class RunsList extends Component {
     constructor (props) {
       super(props)
       this.state={
-        helpDisplayed: false
+        helpDisplayed: false,
+        filterValue: '',
+        items: runs
       }  
+    }
+
+    resetFilter = () => {
+      alert('will reset')
     }
 
     toggleHelpVisibility = () => {
       const newState = Object.assign({}, this.state, {helpDisplayed: !this.state.helpDisplayed})
+      this.setState(newState)
+    }
+
+    changeFilter = text => {
+      const items = runs.filter(item => {
+        return item.runTitle.includes(text)
+          || item.stageName.includes(text)
+          || item.initiator.includes(text)
+      })
+      const newState = Object.assign({}, this.state, {filterValue: text, items})
       this.setState(newState)
     }
 
@@ -103,10 +119,18 @@ class RunsList extends Component {
               <Input
                 placeholder='...filter'
                 transparent
+                value={this.state.filterValue}
                 style={{width: '300px'}}
+                onChange={e => this.changeFilter(e.target.value)}
               />
             </Menu.Item>
-            <Menu.Menu icon position="right">
+            <Menu.Menu position="right">
+              {
+                this.state.filterValue !== '' &&
+                <Menu.Item>
+                <Icon name="remove" link onClick={this.resetFilter} />
+              </Menu.Item>
+              }
               <Menu.Item>
                 <Icon name="question" link onClick={this.toggleHelpVisibility} />
               </Menu.Item>
@@ -122,7 +146,7 @@ class RunsList extends Component {
               `
               There are two search modes: simple and complex. Simple is applied if the first sign in filter 
               is NOT =, otherwise complex search would be applied. 
-              Simple search the entered text would be tested against every fields value of every entity in the grid. 
+              Simple search means the entered text would be tested against every text fields value of every entity in the grid. 
               Complex means entities.filter(entity => {return <the filter you entered after =>}) will be applied, so use valid js code for that. 
               The specified function body should return true or false. 
               `
@@ -146,7 +170,7 @@ class RunsList extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              { this.renderRows(runs) }
+              { this.renderRows(this.state.items) }
             </Table.Body>
           </Table>
         </Container>
