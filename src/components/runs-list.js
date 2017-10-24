@@ -126,9 +126,16 @@ class RunsList extends Component {
               />
             </Menu.Item>
             <Menu.Menu position="right">
+            <Menu.Item>
+              total: {runs.length}
               {
                 this.state.filterValue !== '' &&
-                <Menu.Item>
+                ', filtered:' + this.state.items.length
+              }
+            </Menu.Item>
+              {
+                this.state.filterValue !== '' &&
+              <Menu.Item>
                 <Icon name="remove" link onClick={this.resetFilter} />
               </Menu.Item>
               }
