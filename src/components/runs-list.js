@@ -77,7 +77,8 @@ class RunsList extends Component {
     }
 
     resetFilter = () => {
-      alert('will reset')
+      const newState = Object.assign({}, this.state, {filterValue: '', items: runs})
+      this.setState(newState)
     }
 
     toggleHelpVisibility = () => {
