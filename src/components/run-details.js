@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Segment } from 'semantic-ui-react'
+import { Container, Menu, Segment } from 'semantic-ui-react'
 import { v4 } from 'js-uuid'
 import TreeGrid from './tree-grid'
 
@@ -197,33 +197,39 @@ class RunDetails extends Component {
     render () {
         let summarizedTree = this.fieldsMapper(items, statuses.map(field => field.field))
         return (
-            <Segment.Group horizontal>
-                <Segment style={{width: '50%'}}>
-                    <TreeGrid
-                        selectable
-                        onRowSelect={rowData => this.handleRowSelect(rowData)}
-                        treeField={treeField}
-                        fields={ [{field: 'total', title: 'Total'}, ...statuses] }
-                        treeNodes={summarizedTree}
-                        formatter={value => {
-                                return {backgroundColor: '', value}
-                            } 
-                        }
-                        fieldsFormatter={row => {
-                            if (row.children) return {toBeApplied: false}
-                            const rowStatus = statuses.filter(status => row[status.field] === 1)
-                            return {toBeApplied: true, backgroundColor: '', value: rowStatus[0].title}
-                        }}
-                    />
-                </Segment>
-                <Segment style={{width: '50%'}}>
-                {
-                    this.state.selectedRow &&
-                    this.state.selectedRow.details
-                }
-                </Segment>
-            </Segment.Group>
-            
+            <Container fluid>
+                <Menu>
+                    <Menu.Item>
+                        select all failed passed skipped
+                    </Menu.Item>
+                </Menu>
+                <Segment.Group horizontal>
+                    <Segment style={{width: '50%'}}>
+                        <TreeGrid
+                            selectable
+                            onRowSelect={rowData => this.handleRowSelect(rowData)}
+                            treeField={treeField}
+                            fields={ [{field: 'total', title: 'Total'}, ...statuses] }
+                            treeNodes={summarizedTree}
+                            formatter={value => {
+                                    return {backgroundColor: '', value}
+                                } 
+                            }
+                            fieldsFormatter={row => {
+                                if (row.children) return {toBeApplied: false}
+                                const rowStatus = statuses.filter(status => row[status.field] === 1)
+                                return {toBeApplied: true, backgroundColor: '', value: rowStatus[0].title}
+                            }}
+                        />
+                    </Segment>
+                    <Segment style={{width: '50%'}}>
+                    {
+                        this.state.selectedRow &&
+                        this.state.selectedRow.details
+                    }
+                    </Segment>
+                </Segment.Group>
+            </Container>
         )
     }
 }
