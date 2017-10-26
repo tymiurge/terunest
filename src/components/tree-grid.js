@@ -19,7 +19,10 @@ const propTypes = {
      * if defined the all fields cells will be joint @returns object of 
      * {tobeApplied: bool, backgroundColor: <value>, value: <value>} 
      **/
-    fieldsFormatter: PropTypes.func
+    fieldsFormatter: PropTypes.func,
+    selectable: PropTypes.bool,
+    /** will be applied on row select only if selectable is defined in props */
+    onRowSelect: PropTypes.func
 }
 
 const treeFlatify = (tree, level) => tree.map(node => {
@@ -80,11 +83,15 @@ class TreeGrid extends Component {
         })
     }
 
+    onRowClick = rowData => {
+        this.props.onRowSelect && this.props.onRowSelect(rowData)
+    }
+
     renderRows = rows => rows.map(row => {
         const { children, level } = row
         const intend = children ? (level - 1) * 1.43 : level * 1.43
         const domRow = (
-            <Table.Row key={row.id}>
+            <Table.Row key={row.id} onClick={() => this.onRowClick(row)}>
                 <TreeGridCell
                     intend={intend}
                     content={row.title}
@@ -93,18 +100,8 @@ class TreeGrid extends Component {
                     onExpand={() => this.toggleRowExpand(row.id)}
                 />
                 {
-                    /*this.props.fields.map((field, fieldIdx) => {
-                        const format = this.props.formatter(row[field.field])
-                        return (
-                            <Table.Cell style={{backgroundColor: format.backgroundColor}} key={fieldIdx + row.id + format.value}>
-                                { format.value }
-                            </Table.Cell>
-                        )
-                    })*/
                     this.renderCells(row)
-                    
                 }
-                
             </Table.Row>
         )
         return children && row.expanded
@@ -114,7 +111,7 @@ class TreeGrid extends Component {
 
     render () {
         return (
-            <Table celled compact>
+            <Table celled compact selectable={this.props.selectable}>
                 <Table.Header>
                     <Table.Row>
                         {
