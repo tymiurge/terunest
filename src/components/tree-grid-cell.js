@@ -14,7 +14,7 @@ class TreeGridCell extends Component {
 
     render () {
         return (
-            <Table.Cell>
+            <Table.Cell collapsing>
                 <div style={{marginLeft: this.props.intend + 'em'}}>
                     {
                         !this.props.isLeaf &&
