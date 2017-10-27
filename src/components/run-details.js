@@ -198,14 +198,18 @@ class RunDetails extends Component {
         let summarizedTree = this.fieldsMapper(items, statuses.map(field => field.field))
         return (
             <Container fluid>
-                <Menu>
-                    <Menu.Item>
-                        select all failed passed skipped
-                    </Menu.Item>
-                </Menu>
+                <Container>
+                
+                </Container>
                 <Segment.Group horizontal>
                     <Segment style={{width: '50%'}}>
+                        <Menu borderless attached='top'>
+                            <Menu.Item>
+                                select all failed passed skipped
+                            </Menu.Item>
+                        </Menu>
                         <TreeGrid
+                            attached
                             selectable
                             onRowSelect={rowData => this.handleRowSelect(rowData)}
                             treeField={treeField}

@@ -22,7 +22,8 @@ const propTypes = {
     fieldsFormatter: PropTypes.func,
     selectable: PropTypes.bool,
     /** will be applied on row select only if selectable is defined in props */
-    onRowSelect: PropTypes.func
+    onRowSelect: PropTypes.func,
+    attached: PropTypes.bool
 }
 
 const treeFlatify = (tree, level) => tree.map(node => {
@@ -111,7 +112,7 @@ class TreeGrid extends Component {
 
     render () {
         return (
-            <Table celled compact selectable={this.props.selectable}>
+            <Table celled compact selectable={this.props.selectable} attached={this.props.attached}>
                 <Table.Header>
                     <Table.Row>
                         {
