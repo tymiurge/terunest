@@ -129,9 +129,12 @@ const items = [
 class RunDetails extends Component {
 
     constructor (props) {
-        super()
+        super(props)
+        this.allRows = this.fieldsMapper(items, statuses.map(field => field.field))
         this.state = {
-            selectedRow: null
+            selectedRow: null,
+            rows: this.allRows,
+            currentFilter: 'all'
         }
     }
 
@@ -193,20 +196,56 @@ class RunDetails extends Component {
     handleRowSelect = rowData => {
         this.setState(Object.assign({}, this.state, {selectedRow: rowData}))
     }
+
+    filterTree = (tree, status) => {
+        const treeWithNulls = tree.map(node => {
+            if (!node.children && node[status] > 0) return node
+            if (!node.children && node[status] === 0) return null
+            if (node[status] === 0) return null
+            const filteredChildren = this.filterTree(node.children, status)
+            return Object.assign({}, node, {children: filteredChildren})
+        })
+        const filteredTree = treeWithNulls.filter(node => node !== null)
+        return filteredTree
+    }
+
+    filterItems = (e, { name }) => {
+        let stateCnages = {currentFilter: name, rows: this.allRows}
+        if (name !== 'all') stateCnages.rows = this.filterTree(this.allRows, name)
+        this.setState(Object.assign({}, this.state, stateCnages))        
+    }
+
+    leafsNumber = tree => tree.reduce(
+        (accumulator, node) => {
+            if (!node.children) return accumulator + 1
+            return accumulator + this.leafsNumber(node.children)
+        },
+        0
+    )
     
     render () {
-        let summarizedTree = this.fieldsMapper(items, statuses.map(field => field.field))
+        const { currentFilter } = this.state
         return (
             <Container fluid>
-                <Container>
-                
-                </Container>
                 <Segment.Group horizontal>
                     <Segment style={{width: '50%'}}>
-                        <Menu borderless attached='top'>
-                            <Menu.Item>
-                                select all failed passed skipped
+                        <Menu text attached='top'>
+                            <Menu.Item header>
+                                Show
                             </Menu.Item>
+                            <Menu.Item name='all' onClick={this.filterItems} active={currentFilter === 'all'} />
+                            <Menu.Item name='failed' onClick={this.filterItems} active={currentFilter === 'failed'} />
+                            <Menu.Item name='passed' onClick={this.filterItems} active={currentFilter === 'passed'} />
+                            <Menu.Item name='skipped' onClick={this.filterItems} active={currentFilter === 'skipped'} />
+                            <Menu.Menu position='right'>
+                                <Menu.Item>
+                                    all: {this.leafsNumber(this.allRows)}
+                                    {
+                                        this.state.currentFilter !== 'all' &&
+                                        (', ' + this.state.currentFilter + ': ' + this.leafsNumber(this.state.rows))
+                                    }
+                                </Menu.Item>
+                            </Menu.Menu>
                         </Menu>
                         <TreeGrid
                             attached
@@ -214,7 +253,7 @@ class RunDetails extends Component {
                             onRowSelect={rowData => this.handleRowSelect(rowData)}
                             treeField={treeField}
                             fields={ [{field: 'total', title: 'Total'}, ...statuses] }
-                            treeNodes={summarizedTree}
+                            treeNodes={this.state.rows}
                             formatter={value => {
                                     return {backgroundColor: '', value}
                                 } 
