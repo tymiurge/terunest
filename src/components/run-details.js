@@ -209,10 +209,13 @@ class RunDetails extends Component {
         return filteredTree
     }
 
-    filterItems = (e, { name }) => {
-        let stateCnages = {currentFilter: name, rows: this.allRows}
-        if (name !== 'all') stateCnages.rows = this.filterTree(this.allRows, name)
-        this.setState(Object.assign({}, this.state, stateCnages))        
+    setFilter = name => {
+        let stateChanges = {
+            currentFilter: name,
+            rows: name === 'all' ? this.allRows : this.filterTree(this.allRows, name)
+        }
+        const newState = Object.assign({}, this.state, stateChanges)
+        this.setState(newState)
     }
 
     leafsNumber = tree => tree.reduce(
@@ -222,7 +225,7 @@ class RunDetails extends Component {
         },
         0
     )
-    
+
     render () {
         const { currentFilter } = this.state
         return (
@@ -233,10 +236,10 @@ class RunDetails extends Component {
                             <Menu.Item header>
                                 Show
                             </Menu.Item>
-                            <Menu.Item name='all' onClick={this.filterItems} active={currentFilter === 'all'} />
-                            <Menu.Item name='failed' onClick={this.filterItems} active={currentFilter === 'failed'} />
-                            <Menu.Item name='passed' onClick={this.filterItems} active={currentFilter === 'passed'} />
-                            <Menu.Item name='skipped' onClick={this.filterItems} active={currentFilter === 'skipped'} />
+                            <Menu.Item name='all' onClick={(e, {name}) => this.setFilter(name)} active={currentFilter === 'all'} />
+                            <Menu.Item name='failed' onClick={(e, {name}) => this.setFilter(name)} active={currentFilter === 'failed'} />
+                            <Menu.Item name='passed' onClick={(e, {name}) => this.setFilter(name)} active={currentFilter === 'passed'} />
+                            <Menu.Item name='skipped' onClick={(e, {name}) => this.setFilter(name)} active={currentFilter === 'skipped'} />
                             <Menu.Menu position='right'>
                                 <Menu.Item>
                                     all: {this.leafsNumber(this.allRows)}

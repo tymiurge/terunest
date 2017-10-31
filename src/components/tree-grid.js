@@ -45,6 +45,11 @@ class TreeGrid extends Component {
         }
     }
 
+    componentWillReceiveProps (nextProps) {
+        const newRows = treeFlatify(nextProps.treeNodes, 1)
+        this.setState(Object.assign({}, this.state, {rows: newRows}))
+    }
+
     toggleRowExpand = rowId => {
         const toggleExpandedProp = tree => tree.map(node => {
             const changes = {}
@@ -92,7 +97,7 @@ class TreeGrid extends Component {
         const { children, level } = row
         const intend = children ? (level - 1) * 1.43 : level * 1.43
         const domRow = (
-            <Table.Row key={row.id} onClick={() => this.onRowClick(row)}>
+            <Table.Row key={row.id + (row.children ? row.children.length : 0)} onClick={() => this.onRowClick(row)}>
                 <TreeGridCell
                     intend={intend}
                     content={row.title}
