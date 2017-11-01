@@ -3,6 +3,8 @@ import { Container, Menu } from 'semantic-ui-react'
 import RunsList from './components/runs-list'
 import RunDetails from './components/run-details'
 
+// npm install mobx-react-router --save
+
 class App extends Component {
   state = { activeItem: 'runs list' }
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
