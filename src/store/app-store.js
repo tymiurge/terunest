@@ -1,7 +1,7 @@
 import { observable } from 'mobx'
 
 class AppStore {
-    testRuns = []
+    @observable testRuns = []
     loadedRun = {}
 }
 
