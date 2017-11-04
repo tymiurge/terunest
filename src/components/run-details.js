@@ -8,7 +8,7 @@ class RunDetails extends Component {
 
     constructor (props) {
         super(props)
-        const items = this.props.appState.testRuns
+        const items = this.props.appState.loadedTestRun
         this.allRows = this.fieldsMapper(items, this.props.appState.statuses.map(field => field.field))
         this.state = {
             selectedRow: null,
@@ -133,7 +133,7 @@ class RunDetails extends Component {
                             attached
                             selectable
                             onRowSelect={rowData => this.handleRowSelect(rowData)}
-                            treeField={this.props.appState.testRunsTreeField}
+                            treeField={this.props.appState.testRunTreeField}
                             fields={ [{field: 'total', title: 'Total'}, ...this.props.appState.statuses] }
                             treeNodes={this.state.rows}
                             formatter={value => {
