@@ -1,136 +1,15 @@
 import React, { Component } from 'react'
 import { Container, Menu, Segment } from 'semantic-ui-react'
-import { v4 } from 'js-uuid'
 import TreeGrid from './tree-grid'
+import { observer } from 'mobx-react'
 
-const treeField = {
-    title: 'Run Title', field: 'title'
-}
-
-const statuses = [
-    {
-        title: 'Passed', field: 'passed' 
-    }, {
-        title: 'Failed', field: 'failed' 
-    }, {
-        title: 'Error', field: 'error' 
-    }, {
-        title: 'Skipped', field: 'skipped' 
-    }    
-]
-
-const items = [
-    {
-        id: v4(), title: 'Runs History',
-        children: [
-            {
-                id: v4(), title: 'Tree functionality', 
-                children: [
-                    {
-                        id: v4(), title: 'expand 1-st level parent',
-                        status: 'passed',
-                        details: 'details'
-                    },
-                    {
-                        id: v4(), title: 'expand 2-nd level parend',
-                        status: 'passed',
-                        details: 'some details here too'
-                    }
-                ]
-            }, 
-            {
-                id: v4(), title: 'Last level parent status',
-                children: [
-                    {
-                        id: v4(), title: 'Last level parent: all failed', status: 'failed',
-                        details: 'some details here too'
-                    }, 
-                    {
-                        id: v4(), title: 'Last level parent: all passed', status: 'passed',
-                        details: 'pass details'
-                    }, 
-                    {
-                        id: v4(), title: 'Last level parent: all skipped', status: 'skipped',
-                        details: 'skip details'
-                    }, 
-                    {
-                        id: v4(), title: 'Last level parent: all errors', status: 'error',
-                        details: 'error details'
-                    }, 
-                    {
-                        id: v4(), title: 'Last level parent: failed plus passed, skipped, error',
-                        status: 'failed',
-                        details: 'failed'
-                    },
-                    {
-                        id: v4(), title: 'leaf are passed, skipped and error', status: 'error',
-                        details: 'some details'
-                    }, 
-                    {
-                        id: v4(), title: 'leafs are skipped and error', status: 'skipped',
-                        details: 'some details'
-                    }, 
-                    {
-                        id: v4(), title: 'leafs are passed and error', status: 'skipped',
-                        details: 'some details'
-                    }, 
-                    {
-                        id: v4(), title: 'leafs are passed and skipped', status: 'skipped',
-                        details: 'some details'
-                    }
-                ]
-            },
-            {
-                id: v4(), title: 'First level parent status',
-                children: [
-                    {
-                        id: v4(), title: 'Last level parent: all failed', status: 'failed',
-                        details: 'some details here too'
-                    }, 
-                    {
-                        id: v4(), title: 'Last level parent: all passed', status: 'passed',
-                        details: 'pass details'
-                    }, 
-                    {
-                        id: v4(), title: 'Last level parent: all skipped', status: 'skipped',
-                        details: 'skip details'
-                    }, 
-                    {
-                        id: v4(), title: 'Last level parent: all errors', status: 'error',
-                        details: 'error details'
-                    }, 
-                    {
-                        id: v4(), title: 'Last level parent: failed plus passed, skipped, error',
-                        status: 'failed',
-                        details: 'failed'
-                    },
-                    {
-                        id: v4(), title: 'leaf are passed, skipped and error', status: 'error',
-                        details: 'some details'
-                    }, 
-                    {
-                        id: v4(), title: 'leafs are skipped and error', status: 'skipped',
-                        details: 'some details'
-                    }, 
-                    {
-                        id: v4(), title: 'leafs are passed and error', status: 'skipped',
-                        details: 'some details'
-                    }, 
-                    {
-                        id: v4(), title: 'leafs are passed and skipped', status: 'skipped',
-                        details: 'some details'
-                    }
-                ]
-            }
-        ]
-    }
-]
-
+@observer
 class RunDetails extends Component {
 
     constructor (props) {
         super(props)
-        this.allRows = this.fieldsMapper(items, statuses.map(field => field.field))
+        const items = this.props.appState.testRuns
+        this.allRows = this.fieldsMapper(items, this.props.appState.statuses.map(field => field.field))
         this.state = {
             selectedRow: null,
             rows: this.allRows,
@@ -254,8 +133,8 @@ class RunDetails extends Component {
                             attached
                             selectable
                             onRowSelect={rowData => this.handleRowSelect(rowData)}
-                            treeField={treeField}
-                            fields={ [{field: 'total', title: 'Total'}, ...statuses] }
+                            treeField={this.props.appState.testRunsTreeField}
+                            fields={ [{field: 'total', title: 'Total'}, ...this.props.appState.statuses] }
                             treeNodes={this.state.rows}
                             formatter={value => {
                                     return {backgroundColor: '', value}
@@ -263,7 +142,7 @@ class RunDetails extends Component {
                             }
                             fieldsFormatter={row => {
                                 if (row.children) return {toBeApplied: false}
-                                const rowStatus = statuses.filter(status => row[status.field] === 1)
+                                const rowStatus = this.props.appState.statuses.filter(status => row[status.field] === 1)
                                 return {toBeApplied: true, backgroundColor: '', value: rowStatus[0].title}
                             }}
                         />
