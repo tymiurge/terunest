@@ -6,4 +6,16 @@ const leafsNumber = tree => tree.reduce(
     0
 )
 
-export { leafsNumber }
+const filterTreeByStatus = (tree, status) => {
+    const treeWithNulls = tree.map(node => {
+        if (!node.children && node[status] > 0) return node
+        if (!node.children && node[status] === 0) return null
+        if (node[status] === 0) return null
+        const filteredChildren = filterTreeByStatus(node.children, status)
+        return Object.assign({}, node, {children: filteredChildren})
+    })
+    const filteredTree = treeWithNulls.filter(node => node !== null)
+    return filteredTree
+}
+
+export { leafsNumber, filterTreeByStatus }

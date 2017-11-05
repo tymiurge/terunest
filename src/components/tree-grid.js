@@ -1,29 +1,27 @@
 import React, { Component } from 'react'
 import { Table } from 'semantic-ui-react'
 import TreeGridCell from './tree-grid-cell'
-import PropTypes from 'prop-types'
+//import PropTypes from 'prop-types'
+import {PropTypes} from 'mobx-react'
 
 const propTypes = {
-    treeField: PropTypes.shape({
-        field: PropTypes.string,
-        title: PropTypes.string
-    }).isRequired,
-    fields: PropTypes.array.isRequired,
-    treeNodes: PropTypes.array.isRequired,
+    treeField: PropTypes.objectOrObservableObject.isRequired,
+    fields: PropTypes.arrayOrObservableArray.isRequired,
+    treeNodes: PropTypes.arrayOrObservableArray.isRequired,
     /** 
      * @returns object of {backgroundColor: <value>, value: <value>}; is ignored if fieldsFormatter is defined and if 
      * fieldsFormatter returns {toBeApplied: true} 
      **/
-    formatter: PropTypes.func.isRequired,
+    //formatter: PropTypes.func,
     /** 
      * if defined the all fields cells will be joint @returns object of 
      * {tobeApplied: bool, backgroundColor: <value>, value: <value>} 
      **/
-    fieldsFormatter: PropTypes.func,
-    selectable: PropTypes.bool,
+    //fieldsFormatter: PropTypes.func,
+    //selectable: PropTypes.bool,
     /** will be applied on row select only if selectable is defined in props */
-    onRowSelect: PropTypes.func,
-    attached: PropTypes.bool
+    //onRowSelect: PropTypes.func,
+    //attached: PropTypes.bool
 }
 
 const treeFlatify = (tree, level) => tree.map(node => {

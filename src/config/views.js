@@ -15,10 +15,12 @@ const views = {
         path: '/run/:id',
         component: <RunDetails />,
         beforeEnter: (route, params, store) => {
-            store.app.setRunId(params.id)
+            store.app.setActiveView('runDetails')
+            store.app.setCurrentFilter('all')
+            store.app.fetchTestRun(params.id)
         },
         onEnter: (route, params, store) => {
-            store.app.setActiveView('runDetails')
+            
         }
     })
 }
