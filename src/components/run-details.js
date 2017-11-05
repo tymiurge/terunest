@@ -9,7 +9,6 @@ class RunDetails extends Component {
 
     constructor (props) {
         super(props)
-        const items = this.props.store.app.loadedTestRun
         this.allRows = this.props.store.app.formattedRunDetails
         this.state = {
             selectedRow: null,
@@ -52,6 +51,7 @@ class RunDetails extends Component {
     )
 
     render () {
+        const {app} = this.props.store
         const { currentFilter } = this.state
         return (
             <Container fluid>
@@ -67,7 +67,7 @@ class RunDetails extends Component {
                             <Menu.Item name='skipped' onClick={(e, {name}) => this.setFilter(name)} active={currentFilter === 'skipped'} />
                             <Menu.Menu position='right'>
                                 <Menu.Item>
-                                    all: {this.leafsNumber(this.allRows)}
+                                    all: {app.totalTestRuns}
                                     {
                                         this.state.currentFilter !== 'all' &&
                                         (', ' + this.state.currentFilter + ': ' + this.leafsNumber(this.state.rows))
@@ -79,8 +79,8 @@ class RunDetails extends Component {
                             attached
                             selectable
                             onRowSelect={rowData => this.handleRowSelect(rowData)}
-                            treeField={this.props.store.app.testRunTreeField}
-                            fields={ [{field: 'total', title: 'Total'}, ...this.props.store.app.statuses] }
+                            treeField={app.testRunTreeField}
+                            fields={ [{field: 'total', title: 'Total'}, ...app.statuses] }
                             treeNodes={this.state.rows}
                             formatter={value => {
                                     return {backgroundColor: '', value}
@@ -88,7 +88,7 @@ class RunDetails extends Component {
                             }
                             fieldsFormatter={row => {
                                 if (row.children) return {toBeApplied: false}
-                                const rowStatus = this.props.store.app.statuses.filter(status => row[status.field] === 1)
+                                const rowStatus = app.statuses.filter(status => row[status.field] === 1)
                                 return {toBeApplied: true, backgroundColor: '', value: rowStatus[0].title}
                             }}
                         />
