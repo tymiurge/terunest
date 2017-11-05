@@ -1,6 +1,7 @@
-import { observable } from 'mobx'
+import { observable, computed } from 'mobx'
 import { v4 } from 'js-uuid'
 import {RouterStore} from 'mobx-router'
+import fieldsMapper from './details-tree-formatter'
 
 class AppStore {
     @observable
@@ -10,8 +11,6 @@ class AppStore {
     runId = ''
     setRunId = id => {this.runId = id}
 
-    title = 'OGOGO!!!!'
-    appStoreDump = 'hello from app store'
     /** list of possible test run statuses: now failed, passed, skipped, error */
     @observable statuses = [
         {
@@ -140,6 +139,10 @@ class AppStore {
             ]
         }
     ]
+
+    @computed get formattedRunDetails() {
+        return fieldsMapper(this.loadedTestRun, this.statuses.map(field => field.field))
+    } 
 
     @observable runs = [
         {

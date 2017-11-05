@@ -10,67 +10,12 @@ class RunDetails extends Component {
     constructor (props) {
         super(props)
         const items = this.props.store.app.loadedTestRun
-        this.allRows = this.fieldsMapper(items, this.props.store.app.statuses.map(field => field.field))
+        this.allRows = this.props.store.app.formattedRunDetails
         this.state = {
             selectedRow: null,
             rows: this.allRows,
             currentFilter: 'all'
         }
-    }
-
-    nodeSummarizer = (nodes, statuses) => {
-        const summary = nodes.reduce(
-            (accumulator, node) => {
-                statuses.forEach(field => {
-                    accumulator[field] = (accumulator[field] || 0) + node[field]
-                })
-                return accumulator
-            },
-            {}
-        )
-        return summary
-    }
-
-    nodesAssigner = (tree, statuses) => tree.map(node => {
-        if (!node.children) {
-            return node
-        }
-        const children = this.nodesAssigner(node.children, statuses)
-        const nodeSummary = this.nodeSummarizer(children, statuses)
-        return Object.assign({}, node, {children}, nodeSummary)
-    })
-    
-    leafConvertor = (leaf, statuses) => statuses.reduce(
-        (accumulator, current) => {
-            accumulator[current] = leaf.status === current ? 1 : 0
-            return accumulator
-        },
-        {}
-    )
-
-    leafsAssigner = (tree, statuses) => tree.map(node => {
-        if (!node.children) {
-            let clone = Object.assign({}, node, this.leafConvertor(node, statuses))
-            delete clone.status
-            return clone
-        }
-        const children = this.leafsAssigner(node.children, statuses)
-        return Object.assign({}, node, {children})
-    })
-
-    leafTotalSummurizer = (node, statuses) => statuses.reduce((accumulator, status) => accumulator + node[status], 0)
-
-    totalSummurizer = (tree, statuses) => tree.map(node => {
-        let changes = { total: this.leafTotalSummurizer(node, statuses)}
-        if (node.children) changes['children'] = this.totalSummurizer(node.children, statuses)
-        return Object.assign({}, node, changes)
-    })
-
-    fieldsMapper = (tree, statuses) => {
-        const leafsNormTree = this.leafsAssigner(tree, statuses)
-        const nodesNormTree = this.nodesAssigner(leafsNormTree, statuses)
-        const nodesWithTotal = this.totalSummurizer(nodesNormTree, statuses)
-        return nodesWithTotal
     }
 
     handleRowSelect = rowData => {
