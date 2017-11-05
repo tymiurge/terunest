@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Container, Table, Input, Icon, Menu, Message } from 'semantic-ui-react'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
+import views from './../config/views'
 
+@inject('store')
 @observer
 class RunsList extends Component {
 
@@ -10,7 +12,7 @@ class RunsList extends Component {
       this.state={
         helpDisplayed: false,
         filterValue: '',
-        items: this.props.appState.runs
+        items: this.props.store.app.runs
       }  
     }
 
@@ -34,26 +36,31 @@ class RunsList extends Component {
       this.setState(newState)
     }
 
-    renderRows = rows => rows.map((row, idx) => (
-      <Table.Row key={row.id} positive={row.failed === 0} negative={row.failed !== 0}>
-        <Table.Cell collapsing><Icon name='arrow circle right' link /></Table.Cell>
-        <Table.Cell>{row.runTitle}</Table.Cell>
-        <Table.Cell>{row.stageName}</Table.Cell>
-        <Table.Cell>{row.initiator}</Table.Cell>
-        <Table.Cell>{row.startAt}</Table.Cell>
-        <Table.Cell>{row.duration}</Table.Cell>
-        <Table.Cell>{row.total}</Table.Cell>
-        <Table.Cell>{row.failed}</Table.Cell>
-        <Table.Cell>{row.passed}</Table.Cell>
-        <Table.Cell>{row.skipped}</Table.Cell>
-      </Table.Row>
-    ))
+    renderRows = rows => rows.map((row, idx) => {
+      const {store} = this.props
+      const {router: {goTo}} = store
+      return (
+        <Table.Row key={row.id} positive={row.failed === 0} negative={row.failed !== 0}>
+          <Table.Cell collapsing>
+            <Icon name='arrow circle right' link onClick={() => goTo(views.runDetails, {id: row.id}, store)} />
+          </Table.Cell>
+          <Table.Cell>{row.runTitle}</Table.Cell>
+          <Table.Cell>{row.stageName}</Table.Cell>
+          <Table.Cell>{row.initiator}</Table.Cell>
+          <Table.Cell>{row.startAt}</Table.Cell>
+          <Table.Cell>{row.duration}</Table.Cell>
+          <Table.Cell>{row.total}</Table.Cell>
+          <Table.Cell>{row.failed}</Table.Cell>
+          <Table.Cell>{row.passed}</Table.Cell>
+          <Table.Cell>{row.skipped}</Table.Cell>
+        </Table.Row>
+      )  
+    })
 
     render() {
       return (
         <Container>
           <Menu icon borderless fluid>
-            
             <Menu.Item>
               <Input
                 placeholder='...filter'
@@ -65,7 +72,7 @@ class RunsList extends Component {
             </Menu.Item>
             <Menu.Menu position="right">
             <Menu.Item>
-              total: {this.props.appState.runs.length}
+              total: {this.props.store.app.runs.length}
               {
                 this.state.filterValue !== '' &&
                 ', filtered:' + this.state.items.length
@@ -120,8 +127,8 @@ class RunsList extends Component {
             </Table.Body>
           </Table>
         </Container>
-    )
+      )
   }
 }
 
-export default RunsList;
+export default RunsList

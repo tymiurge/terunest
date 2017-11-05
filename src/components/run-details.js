@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import { Container, Menu, Segment } from 'semantic-ui-react'
 import TreeGrid from './tree-grid'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 
+@inject('store')
 @observer
 class RunDetails extends Component {
 
     constructor (props) {
         super(props)
-        const items = this.props.appState.loadedTestRun
-        this.allRows = this.fieldsMapper(items, this.props.appState.statuses.map(field => field.field))
+        const items = this.props.store.app.loadedTestRun
+        this.allRows = this.fieldsMapper(items, this.props.store.app.statuses.map(field => field.field))
         this.state = {
             selectedRow: null,
             rows: this.allRows,
@@ -133,8 +134,8 @@ class RunDetails extends Component {
                             attached
                             selectable
                             onRowSelect={rowData => this.handleRowSelect(rowData)}
-                            treeField={this.props.appState.testRunTreeField}
-                            fields={ [{field: 'total', title: 'Total'}, ...this.props.appState.statuses] }
+                            treeField={this.props.store.app.testRunTreeField}
+                            fields={ [{field: 'total', title: 'Total'}, ...this.props.store.app.statuses] }
                             treeNodes={this.state.rows}
                             formatter={value => {
                                     return {backgroundColor: '', value}
@@ -142,7 +143,7 @@ class RunDetails extends Component {
                             }
                             fieldsFormatter={row => {
                                 if (row.children) return {toBeApplied: false}
-                                const rowStatus = this.props.appState.statuses.filter(status => row[status.field] === 1)
+                                const rowStatus = this.props.store.app.statuses.filter(status => row[status.field] === 1)
                                 return {toBeApplied: true, backgroundColor: '', value: rowStatus[0].title}
                             }}
                         />

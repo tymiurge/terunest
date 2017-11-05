@@ -1,7 +1,17 @@
 import { observable } from 'mobx'
 import { v4 } from 'js-uuid'
+import {RouterStore} from 'mobx-router'
 
 class AppStore {
+    @observable
+    activeView = 'runsList'
+    setActiveView = (viewName) => {this.activeView = viewName}
+
+    runId = ''
+    setRunId = id => {this.runId = id}
+
+    title = 'OGOGO!!!!'
+    appStoreDump = 'hello from app store'
     /** list of possible test run statuses: now failed, passed, skipped, error */
     @observable statuses = [
         {
@@ -194,5 +204,8 @@ class AppStore {
         }
       ]
 }
-const appState = new AppStore()
-export default appState
+const store = {
+    app: new AppStore(),
+    router: new RouterStore()
+}
+export default store
