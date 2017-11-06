@@ -12,7 +12,7 @@ class RunsList extends Component {
       this.state={
         helpDisplayed: false,
         filterValue: '',
-        items: this.props.store.app.runs
+        items: this.props.store.runs.list
       }  
     }
 
@@ -72,7 +72,7 @@ class RunsList extends Component {
             </Menu.Item>
             <Menu.Menu position="right">
             <Menu.Item>
-              total: {this.props.store.app.runs.length}
+              total: {this.props.store.runs.list.length}
               {
                 this.state.filterValue !== '' &&
                 ', filtered:' + this.state.items.length
