@@ -11,28 +11,19 @@ class RunsList extends Component {
       super(props)
       this.state={
         helpDisplayed: false,
-        filterValue: '',
-        items: this.props.store.runs.list
       }  
     }
 
+    changeFilter = text => {
+      this.props.store.runs.filter = text
+    }
+
     resetFilter = () => {
-      const newState = Object.assign({}, this.state, {filterValue: '', items: this.props.appState.runs})
-      this.setState(newState)
+      this.props.store.runs.filter = ''
     }
 
     toggleHelpVisibility = () => {
       const newState = Object.assign({}, this.state, {helpDisplayed: !this.state.helpDisplayed})
-      this.setState(newState)
-    }
-
-    changeFilter = text => {
-      const items = this.props.appState.runs.filter(item => {
-        return item.runTitle.includes(text)
-          || item.stageName.includes(text)
-          || item.initiator.includes(text)
-      })
-      const newState = Object.assign({}, this.state, {filterValue: text, items})
       this.setState(newState)
     }
 
@@ -58,6 +49,7 @@ class RunsList extends Component {
     })
 
     render() {
+      const {runs} = this.props.store
       return (
         <Container>
           <Menu icon borderless fluid>
@@ -65,21 +57,21 @@ class RunsList extends Component {
               <Input
                 placeholder='...filter'
                 transparent
-                value={this.state.filterValue}
+                value={this.props.store.runs.filter}
                 style={{width: '300px'}}
                 onChange={e => this.changeFilter(e.target.value)}
               />
             </Menu.Item>
             <Menu.Menu position="right">
             <Menu.Item>
-              total: {this.props.store.runs.list.length}
+              total: {runs.list.length}
               {
-                this.state.filterValue !== '' &&
-                ', filtered:' + this.state.items.length
+                runs.filter !== '' &&
+                ', filtered:' + runs.displayed.length
               }
             </Menu.Item>
               {
-                this.state.filterValue !== '' &&
+                runs.filter !== '' &&
               <Menu.Item>
                 <Icon name="remove" link onClick={this.resetFilter} />
               </Menu.Item>
@@ -123,7 +115,7 @@ class RunsList extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              { this.renderRows(this.state.items) }
+              { this.renderRows(runs.displayed) }
             </Table.Body>
           </Table>
         </Container>

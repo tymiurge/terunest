@@ -7,8 +7,8 @@ const views = {
     runsList: new Route({
         path: '/',
         component: <RunsList />,
-        onEnter: (route, params, store) => {
-            store.app.setActiveView('runsList')
+        beforeEnter: (route, params, store) => {
+            store.runs.fetchList()
         }
     }),
     runDetails: new Route({
@@ -18,9 +18,6 @@ const views = {
             store.app.setActiveView('runDetails')
             store.app.setCurrentFilter('all')
             store.app.fetchTestRun(params.id)
-        },
-        onEnter: (route, params, store) => {
-            
         }
     })
 }
