@@ -9,14 +9,13 @@ class RunDetails extends Component {
 
     constructor (props) {
         super(props)
-        this.allRows = this.props.store.app.formattedRunDetails
         this.state = {
             selectedRow: null
         }
     }
 
     handleRowSelect = rowData => {
-        this.setState(Object.assign({}, this.state, {selectedRow: rowData}))
+        this.props.store.app.setSelected(rowData)
     }
     
     setFilter = name => {
@@ -79,8 +78,8 @@ class RunDetails extends Component {
                     </Segment>
                     <Segment style={{width: '50%'}}>
                     {
-                        this.state.selectedRow &&
-                        this.state.selectedRow.details
+                        app.selected &&
+                        app.selected.details
                     }
                     </Segment>
                 </Segment.Group>

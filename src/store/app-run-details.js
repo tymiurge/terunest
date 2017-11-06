@@ -143,6 +143,7 @@ class RunDetailsStore {
             50
         )
     }
+
     /** loaded test run as a tree */
     @observable loadedTestRun = []
 
@@ -166,6 +167,12 @@ class RunDetailsStore {
 
     setCurrentFilter (filterName) {
         this.currentFilter = filterName
+    }
+
+    @observable selected = null
+
+    setSelected(entity) {
+        this.selected = entity.details ? entity : null
     }
 }
 
