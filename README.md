@@ -1,1 +1,1 @@
-Online test run analyzer/viewer. 
+Online test run viewer. 
