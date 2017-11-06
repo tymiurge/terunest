@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Container, Menu, Segment } from 'semantic-ui-react'
 import TreeGrid from './tree-grid'
+import TestDetails from './test-details'
 import { observer, inject } from 'mobx-react'
 
 @inject('store')
@@ -79,7 +80,11 @@ class RunDetails extends Component {
                     <Segment style={{width: '50%'}}>
                     {
                         app.selected &&
-                        app.selected.details
+                        <TestDetails 
+                            steps={app.selected.steps}
+                            consoleErrors={app.selected.consoleErrors}
+                            responseHeaders={app.selected.responseHeaders}
+                        />
                     }
                     </Segment>
                 </Segment.Group>
