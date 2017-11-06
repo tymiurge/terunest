@@ -1,6 +1,4 @@
 import { observable, computed } from 'mobx'
-import { v4 } from 'js-uuid'
-import API from 'fetch-api'
 
 class RunsListStore {
 
@@ -9,13 +7,11 @@ class RunsListStore {
     @observable filter = ''
 
     fetchList () {
-      let api = new API({
-        baseURI: 'http://localhost:9000'
-      })   
-      api.get('/runsList', (err, res) => {
-        if (err) throw err
-        this.list = JSON.parse(res)
-      })
+      fetch('/runsList')
+        .then(resp => resp.json())
+        .then(data => {
+          this.list = data
+        })
     }
 
     @computed get displayed() {
