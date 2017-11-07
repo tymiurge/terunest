@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Table } from 'semantic-ui-react'
+import Headers from './headers'
 
 class ResponseHeaders extends Component {
     render () {
@@ -31,7 +32,7 @@ class ResponseHeaders extends Component {
                             }
                             return (
                                 <Table.Row key={idx + 'headers'}>
-                                    <Table.Cell colSpan={2}>bla bla bla</Table.Cell>
+                                    <Table.Cell colSpan={2}><Headers headers={item}/></Table.Cell>
                                 </Table.Row>
                             )
                         })
