@@ -5,6 +5,9 @@ const path = require('path')
 const app = express()
 const v4 = require('uuid/v1');
 
+// app settings
+const reportsDir = path.resolve(__dirname, '..', 'reports')
+
 // Setup logger
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
 
