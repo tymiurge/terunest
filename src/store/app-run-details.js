@@ -29,6 +29,7 @@ class RunDetailsStore {
     }
 
     fetchTestRun (id) {
+        /*
         const response =  [
             {
                 id: v4(), title: 'Runs History',
@@ -136,6 +137,12 @@ class RunDetailsStore {
             }
         ]    
         this.loadedTestRun = fieldsMapper(response, this.statuses.map(field => field.field))
+        */
+        fetch('/runReport/' + id)
+            .then(resp => resp.json())
+            .then(data => {
+                this.list = data
+            })
     }
 
     /** loaded test run as a tree */

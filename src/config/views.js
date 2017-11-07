@@ -12,7 +12,7 @@ const views = {
         }
     }),
     runDetails: new Route({
-        path: '/run/:id',
+        path: '/runReport/:id',
         component: <RunDetails />,
         beforeEnter: (route, params, store) => {
             store.app.setActiveView('runDetails')
