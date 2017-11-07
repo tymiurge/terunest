@@ -172,8 +172,17 @@ class RunDetailsStore {
                 {
                     "text": "I open URL: http://stavka-stage-00.ginsp.net/?ref=qa_03_11", 
                     "duration": "2.21", 
-                    "status": 
-                    "passed"
+                    "status": "passed"
+                },
+                {
+                    "text": "I open URL: http://stavka-stage-00.ginsp.net/?ref=qa_03_11", 
+                    "duration": "2.21", 
+                    "status": "failed"
+                },
+                {
+                    "text": "I open URL: http://stavka-stage-00.ginsp.net/?ref=qa_03_11", 
+                    "duration": "2.21", 
+                    "status": "error"
                 }
             ], 
             "responseHeaders": [
