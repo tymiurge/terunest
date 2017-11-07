@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const reportsDir = path.resolve(__dirname, '..', 'reports')
+
 
 listReports = dir => fs.readdirSync(dir).reduce(
     (list, file) => {
@@ -13,8 +13,8 @@ listReports = dir => fs.readdirSync(dir).reduce(
 )
 
 mainReportsContent = reportsDir => listReports(reportsDir).reduce(
-    (arr, file) => arr.concat([fs.readFileSync(file, 'utf8')]),
+    (arr, file) => arr.concat(JSON.parse([fs.readFileSync(file, 'utf8')])),
     []
 )
 
-export default mainReportsContent
+module.exports = mainReportsContent

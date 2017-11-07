@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, Table, Input, Icon, Menu, Message } from 'semantic-ui-react'
 import { observer, inject } from 'mobx-react'
 import views from './../config/views'
+import { tstampToShortStr, durationInMinutes } from './../utils'
 
 @inject('store')
 @observer
@@ -30,20 +31,22 @@ class RunsList extends Component {
     renderRows = rows => rows.map((row, idx) => {
       const {store} = this.props
       const {router: {goTo}} = store
+      const {failed, error, passed, skipped} = row.runStatuses
       return (
         <Table.Row key={row.id} positive={row.failed === 0} negative={row.failed !== 0}>
           <Table.Cell collapsing>
             <Icon name='arrow circle right' link onClick={() => goTo(views.runDetails, {id: row.id}, store)} />
           </Table.Cell>
-          <Table.Cell>{row.runTitle}</Table.Cell>
+          <Table.Cell>{row.brand + '-' + row.runType}</Table.Cell>
           <Table.Cell>{row.stageName}</Table.Cell>
           <Table.Cell>{row.initiator}</Table.Cell>
-          <Table.Cell>{row.startAt}</Table.Cell>
-          <Table.Cell>{row.duration}</Table.Cell>
-          <Table.Cell>{row.total}</Table.Cell>
-          <Table.Cell>{row.failed}</Table.Cell>
-          <Table.Cell>{row.passed}</Table.Cell>
-          <Table.Cell>{row.skipped}</Table.Cell>
+          <Table.Cell>{tstampToShortStr(row.startAt)}</Table.Cell>
+          <Table.Cell>{durationInMinutes(row.duration)}</Table.Cell>
+          <Table.Cell>{failed + error + passed + skipped}</Table.Cell>
+          <Table.Cell>{failed}</Table.Cell>
+          <Table.Cell>{error}</Table.Cell>
+          <Table.Cell>{passed}</Table.Cell>
+          <Table.Cell>{skipped}</Table.Cell>
         </Table.Row>
       )  
     })
@@ -110,6 +113,7 @@ class RunsList extends Component {
                 <Table.HeaderCell>Duration</Table.HeaderCell>
                 <Table.HeaderCell>Total</Table.HeaderCell>
                 <Table.HeaderCell>Failed</Table.HeaderCell>
+                <Table.HeaderCell>Error</Table.HeaderCell>
                 <Table.HeaderCell>Passed</Table.HeaderCell>
                 <Table.HeaderCell>Skipped</Table.HeaderCell>
               </Table.Row>

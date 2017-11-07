@@ -1,9 +1,9 @@
-// server/app.js
 const express = require('express')
 const morgan = require('morgan')
 const path = require('path')
 const app = express()
-const v4 = require('uuid/v1');
+const v4 = require('uuid/v1')
+const mainReportsContent = require('./reports-dir-utils')
 
 // app settings
 const reportsDir = path.resolve(__dirname, '..', 'reports')
@@ -15,8 +15,7 @@ app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:htt
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 app.get('/runsList', (req, res) => {
-  
-  const response = 
+  /*const response = 
   [
       {
         id: v4(), runTitle: 'BRAND NO NAME', stageName: 'stage-00',
@@ -78,8 +77,9 @@ app.get('/runsList', (req, res) => {
         initiator: 'shrek', startAt: '10/10/17, 21:45', duration: '23v, 41s',
         total: 78, passed: '77', failed: 0, skipped: 5
       }
-  ]
-  res.json(response)
+  ]*/
+  const runsList = mainReportsContent(reportsDir)
+  res.json(runsList)
 })
 
 // Always return the main index.html, so react-router render the route in the client
@@ -87,6 +87,4 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
 
-
-
-module.exports = app;
+module.exports = app
