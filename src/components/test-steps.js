@@ -19,7 +19,7 @@ class TestSteps extends Component {
             <Table compact>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Step</Table.HeaderCell>
+                        <Table.HeaderCell>Step Description</Table.HeaderCell>
                         <Table.HeaderCell collapsing>Duration</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>

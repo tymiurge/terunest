@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Accordion, Icon, Label } from 'semantic-ui-react'
 import TestSteps from './test-steps'
 import ConsoleErrors from './console-errors'
+import ResponseHeaders from './response-headers'
 
 class TestDetails extends Component {
 
@@ -9,7 +10,8 @@ class TestDetails extends Component {
         super(props)
         this.state = {
             steps: true,
-            consoleErrors: true
+            consoleErrors: true,
+            responseHeaders: true
         }
     }
 
@@ -36,6 +38,14 @@ class TestDetails extends Component {
                 </Accordion.Title>
                 <Accordion.Content active={this.state.consoleErrors}>
                     <ConsoleErrors consoleErrors={this.props.consoleErrors} />
+                </Accordion.Content>
+                <Accordion.Title active={this.state.responseHeaders} onClick={() => this.toggle('responseHeaders')}>
+                    <Icon name='dropdown' />
+                    Response Headers
+                    <Label color='blue' style={{marginLeft: '5px'}} horizontal>{this.props.responseHeaders.length}</Label>
+                </Accordion.Title>
+                <Accordion.Content active={this.state.responseHeaders}>
+                    <ResponseHeaders responses={this.props.responseHeaders} />
                 </Accordion.Content>
             </Accordion>    
         )
