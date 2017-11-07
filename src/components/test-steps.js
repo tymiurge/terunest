@@ -18,8 +18,10 @@ class TestSteps extends Component {
         return (
             <Table compact>
                 <Table.Header>
-                    <Table.HeaderCell>Step</Table.HeaderCell>
-                    <Table.HeaderCell collapsing>Duration</Table.HeaderCell>
+                    <Table.Row>
+                        <Table.HeaderCell>Step</Table.HeaderCell>
+                        <Table.HeaderCell collapsing>Duration</Table.HeaderCell>
+                    </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {this.renderRows()}
