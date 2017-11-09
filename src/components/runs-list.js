@@ -35,7 +35,11 @@ class RunsList extends Component {
       return (
         <Table.Row key={row.id} positive={row.failed === 0} negative={row.failed !== 0}>
           <Table.Cell collapsing>
-            <Icon name='arrow circle right' link onClick={() => goTo(views.runDetails, {id: row.startAt}, store)} />
+            <Icon name='arrow circle right' link onClick={
+              () => {
+                  goTo(views.runDetails, {id: row.startAt}, store)
+                }
+              } />
           </Table.Cell>
           <Table.Cell>{row.brand + '-' + row.runType}</Table.Cell>
           <Table.Cell>{row.stageName}</Table.Cell>

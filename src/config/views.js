@@ -14,11 +14,14 @@ const views = {
     runDetails: new Route({
         path: '/runReport/:id',
         component: <RunDetails />,
+        onEnter: (route, params, store, reqParams) => {
+            store.app.fetchTestRun(params.id)
+        },
         beforeEnter: (route, params, store) => {
             store.app.setActiveView('runDetails')
             store.app.setCurrentFilter('all')
-            store.app.fetchTestRun(params.id)
         }
+
     })
 }
 

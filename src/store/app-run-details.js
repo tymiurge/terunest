@@ -141,7 +141,7 @@ class RunDetailsStore {
         fetch('/runReport/' + id)
             .then(resp => resp.json())
             .then(data => {
-                this.list = data
+                this.loadedTestRun = data
             })
     }
 
