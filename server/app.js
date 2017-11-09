@@ -21,8 +21,8 @@ app.get('/runsList', (req, res) => {
 
 app.get('/runReport/:id', (req, res) => {
   const id = req.params.id
-  res.json(fsReports.getRunReport(reportsDir, id))
-  console.log(id)
+  const runReport = fsReports.getRunReport(reportsDir, id)
+  res.json(runReport) 
 })
 
 // Always return the main index.html, so react-router render the route in the client

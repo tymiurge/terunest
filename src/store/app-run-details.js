@@ -141,7 +141,7 @@ class RunDetailsStore {
         fetch('/runReport/' + id)
             .then(resp => resp.json())
             .then(data => {
-                this.loadedTestRun = data
+                this.loadedTestRun = fieldsMapper(data, this.statuses.map(field => field.field))
             })
     }
 
