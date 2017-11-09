@@ -21,7 +21,8 @@ const propTypes = {
     //selectable: PropTypes.bool,
     /** will be applied on row select only if selectable is defined in props */
     //onRowSelect: PropTypes.func,
-    //attached: PropTypes.bool
+    //attached: PropTypes.bool,
+    //footer: PropTypes.bool
 }
 
 const treeFlatify = (tree, level) => tree.map(node => {
@@ -113,6 +114,21 @@ class TreeGrid extends Component {
             : domRow
     })
 
+    renderFooterCells = () => this.props.fields.map(gridFieldObj => {
+        const footerFieldValue = this.props.treeNodes.reduce(
+            (sum, current) => sum + current[gridFieldObj.field],
+            0
+        )
+        return (
+            <Table.HeaderCell
+                textAlign='center'
+                key={gridFieldObj.field + '_' + footerFieldValue}
+            >
+                {footerFieldValue}
+            </Table.HeaderCell>
+        )
+    })
+
     render () {
         return (
             <Table celled compact selectable={this.props.selectable} attached={this.props.attached}>
@@ -131,6 +147,17 @@ class TreeGrid extends Component {
                         this.renderRows(this.state.rows)
                     }
                 </Table.Body>
+                {
+                this.props.footer &&
+                <Table.Footer>
+                    <Table.Row>
+                    { [
+                        <Table.HeaderCell>Summury</Table.HeaderCell>, 
+                        ...this.renderFooterCells()
+                    ] }
+                    </Table.Row>
+                </Table.Footer>
+                }
             </Table>
         )
     }

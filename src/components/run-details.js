@@ -40,7 +40,7 @@ class RunDetails extends Component {
         const {app} = this.props.store
         return (
             <Container fluid>
-                <Grid columns={2}>
+                <Grid columns={2} style={{margin: '0px 20px'}}>
                     <Grid.Row>
                         <Grid.Column>
                             <Menu text attached='top'>
@@ -65,17 +65,13 @@ class RunDetails extends Component {
                                 treeField={app.testRunTreeField}
                                 fields={ [{field: 'total', title: 'Total'}, ...app.statuses] }
                                 treeNodes={app.displayedTests}
-                                formatter={
-                                    function(value) {return {backgroundColor: '', value}}
-                                    /*value => {
-                                        return {backgroundColor: '', value}
-                                    } */
-                                }
+                                formatter={ value => ({backgroundColor: '', value}) }
                                 fieldsFormatter={row => {
                                     if (row.children) return {toBeApplied: false}
                                     const rowStatus = app.statuses.filter(status => row[status.field] === 1)
                                     return {toBeApplied: true, backgroundColor: '', value: rowStatus[0].title}
                                 }}
+                                footer={true}
                             />
                         </Grid.Column>
                         <Grid.Column>
