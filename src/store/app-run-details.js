@@ -1,5 +1,4 @@
 import { observable, computed } from 'mobx'
-import { v4 } from 'js-uuid'
 import fieldsMapper from './details-tree-formatter'
 import { leafsNumber, filterTreeByStatus } from './tree-utils'
 
