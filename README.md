@@ -1,9 +1,8 @@
 Simple test results viewer app written with react and mobx. 
 Created for a concrete project so it is not supposed to be an universal application. 
-Test executor (in my case it was a python GUI tests runner) is responsible for gathering results and sending them with curl to the application server in the following format:
+Test executor (in my case it was a python GUI tests runner) is responsible for gathering results and sending them with curl to the application server in the following format/structure:
 
-Structure of reports: 
-IMG results_structure
+![reports structure](/doc/reports_structure.png?raw=true)
 
 Where the report headers files (the json ones located in the 'reports' dir) store summarized info about that run:
 - initiator
@@ -16,10 +15,7 @@ The server part just reads the content of reports headers and sends them to the 
 
 ![test runs](/doc/runs_list.png?raw=true)
 
-By clicking on the test run details button (arrow in circle in every row) the app navigates to concrete test run details, with ability to 
-observe all tests. 
-IMG tree 
+By clicking on the test run details button (arrow in circle in every row) the app navigates to concrete test run details, with ability to observe all tests of the run and,  by selecting a specific test in the tests tree the app shows more info on steps, console errors and response headers of the selected test:
 
-By selecting on a specific test in the tests tree user is provided with abilities to get more info on that test steps, console errors and response headers
+![test report](/doc/test_steps.png?raw=true)
 
-img steps
