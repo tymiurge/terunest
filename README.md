@@ -14,7 +14,7 @@ etc, etc.
 
 The server part just reads the content of reports headers and sends them to the web app: 
 
-IMG runs list
+![test runs](/doc/runs_list.png?raw=true)
 
 By clicking on the test run details button (arrow in circle in every row) the app navigates to concrete test run details, with ability to 
 observe all tests. 
