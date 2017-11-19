@@ -41,7 +41,7 @@ class RunsList extends Component {
                 }
               } />
           </Table.Cell>
-          <Table.Cell>{row.brand + '-' + row.runType}</Table.Cell>
+          <Table.Cell>{row.runTitle}</Table.Cell>
           <Table.Cell>{row.stageName}</Table.Cell>
           <Table.Cell>{row.initiator}</Table.Cell>
           <Table.Cell>{tstampToShortStr(row.startAt)}</Table.Cell>

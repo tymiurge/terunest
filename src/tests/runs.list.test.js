@@ -1,11 +1,12 @@
-import runsFixture from './fixtures/runs-list'
+import runsFixture from './fixtures/fixture-runs-list'
 import store from './../store/app-store'
 
 describe('runs-list tests', () => {
 
     it('test runs list filter', () => {
-        store.runs.list = runsFixture
-        store.runs.filter = 'build 1345'        
+        const {runs} = store
+        runs.setList(runsFixture)
+        runs.filter = 'build 0001'        
         const filteredList = store.runs.displayed
         expect(filteredList.length).toBe(1)
     })

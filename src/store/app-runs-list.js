@@ -6,11 +6,15 @@ class RunsListStore {
 
     @observable filter = ''
 
+    setList (rawList) {
+        this.list = rawList.map(item => Object.assign({}, item, {runTitle: item.brand + '-' + item.runType}))
+    }
+
     fetchList () {
       fetch('/runsList')
         .then(resp => resp.json())
         .then(data => {
-          this.list = data
+          this.setList(data)
         })
     }
 
