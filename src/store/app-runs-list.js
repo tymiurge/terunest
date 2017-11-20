@@ -24,7 +24,7 @@ class RunsListStore {
             : this.list.filter(item => {
                 return item.runTitle.includes(this.filter)
                     || item.stageName.includes(this.filter)
-                    || item.initiator.includes(this.filters)
+                    || item.initiator.includes(this.filter)
             })
     }
 }
